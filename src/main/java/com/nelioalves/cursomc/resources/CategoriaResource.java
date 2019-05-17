@@ -3,30 +3,30 @@ package com.nelioalves.cursomc.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nelioalves.cursomc.domain.Categoria;
+import com.nelioalves.cursomc.services.CategoriaService;
 
 @RestController
 @RequestMapping(value="/categorias") //o parametro do 'value' eh o nome do endpoit que eu quero criar, essa classe serah um controlador REST e
 										// responderah pelo endpoint /categorias
 public class CategoriaResource {
 	
+	@Autowired
+	private CategoriaService service;		//acessando o servico
+	
 	//para esse metodo java ser uma funcao REST, eu tenho que associar ela com algum dos verbos do http
-	@RequestMapping(method=RequestMethod.GET)
-	public List<Categoria> listar() {
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
-		Categoria cat1 = new Categoria(1, "informatica");
-		Categoria cat2 = new Categoria(2, "escritorio");
+		Categoria obj = service.buscar(id);
+		return ResponseEntity.ok().body(obj);
 		
-		//o List eh uma interface, aqui eu tenho que usar polimorfirsmo com o ArrayList
-		List <Categoria> lista = new ArrayList<>();
-		lista.add(cat1);
-		lista.add(cat2);
-		
-		//return "REST estah funcionando!";
-		return lista;
 	}
 }
