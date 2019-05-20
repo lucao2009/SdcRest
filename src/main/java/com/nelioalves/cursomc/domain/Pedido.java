@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
@@ -29,14 +28,13 @@ public class Pedido implements Serializable {
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
 	
-	
+	//os pagamentos de um pedido podem ser serializados
 	//mapeamento bidirecional 1 para 1
 	//para o id do pagamento ser o mesmo do pedido
 	@OneToOne(cascade=CascadeType.ALL, mappedBy = "pedido")		//isso eh necessario para evitar um erro de entidade transiente quando vc vai salvar um pedido e o pagamento dele (peculiaridade do JPA)
-	@JsonManagedReference
 	private Pagamento pagamento;
 	
-	@JsonManagedReference		//os clientes de um pedido podem ser serializados
+	//os clientes de um pedido podem ser serializados
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
