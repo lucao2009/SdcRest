@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //classe de associacao
 @Entity
 public class ItemPedido implements Serializable {
@@ -12,6 +14,7 @@ public class ItemPedido implements Serializable {
 	
 	//chave composta composta com classe auxiliar
 	@EmbeddedId		//id de tipo auxiliar
+	@JsonIgnore
 	private ItemPedidoPK id = new ItemPedidoPK();
 	
 	private Double desconto;
@@ -30,6 +33,7 @@ public class ItemPedido implements Serializable {
 		this.preco = preco;
 	}
 
+	@JsonIgnore		//para evitar a referencia ciclica, pois tudo que comeca com get ele tem que serializar
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
