@@ -3,10 +3,12 @@ package com.nelioalves.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.repositories.CategoriaRepository;
+import com.nelioalves.cursomc.services.exceptions.DataIntegrityException;
 import com.nelioalves.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -31,5 +33,15 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId());	//busco o objeto no banco, caso nao exista o metodo find me lanca uma excessao
 		return repo.save(obj);		//o metodo save() do repository serve tanto para salvar quanto para modificar. ele diferencia pelo id se for null ou nao.
+	}
+	
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
+		}
+		
 	}
 }
