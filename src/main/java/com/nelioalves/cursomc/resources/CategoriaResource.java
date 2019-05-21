@@ -24,9 +24,9 @@ public class CategoriaResource {
 	
 	//para esse metodo java ser uma funcao REST, eu tenho que associar ela com algum dos verbos do http
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
 	} // fim do GET
@@ -37,5 +37,12 @@ public class CategoriaResource {
 		//aqui o novo objeto jah foi inserido no banco e jah possui um id, agora eu uso esse id na URI de resposta
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();	//construindo a URI
 		return ResponseEntity.created(uri).build();	// retornando a resposta HTTP
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT) 
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+		obj.setId(id);  // por garantia
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -17,7 +17,7 @@ public class CategoriaService {
 	private CategoriaRepository repo;		//usando um repository
 	
 	//operacao/metodo capaz de buscar uma categoria por codigo
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto nao encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
@@ -26,5 +26,10 @@ public class CategoriaService {
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);	// insercao e nao atualizacao
 		return repo.save(obj);
+	}
+	
+	public Categoria update(Categoria obj) {
+		find(obj.getId());	//busco o objeto no banco, caso nao exista o metodo find me lanca uma excessao
+		return repo.save(obj);		//o metodo save() do repository serve tanto para salvar quanto para modificar. ele diferencia pelo id se for null ou nao.
 	}
 }
