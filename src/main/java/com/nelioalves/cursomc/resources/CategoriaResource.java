@@ -1,14 +1,15 @@
 package com.nelioalves.cursomc.resources;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.services.CategoriaService;
@@ -28,5 +29,13 @@ public class CategoriaResource {
 		Categoria obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 		
+	} // fim do GET
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Categoria obj) {	// a notacao @RequestBody faz o json ser convertido para um objeto Java automaticamente
+		obj = service.insert(obj);	//a operacao save do repository me retorna um objeto, por isso o 'obj = '
+		//aqui o novo objeto jah foi inserido no banco e jah possui um id, agora eu uso esse id na URI de resposta
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();	//construindo a URI
+		return ResponseEntity.created(uri).build();	// retornando a resposta HTTP
 	}
 }
