@@ -36,8 +36,9 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		find(obj.getId());	//busco o objeto no banco, caso nao exista o metodo find me lanca uma excessao
-		return repo.save(obj);		//o metodo save() do repository serve tanto para salvar quanto para modificar. ele diferencia pelo id se for null ou nao.
+		Categoria newObj = find(obj.getId());	//busco o objeto no banco, caso nao exista o metodo find me lanca uma excessao
+		updateData(newObj, obj);
+		return repo.save(newObj);		//o metodo save() do repository serve tanto para salvar quanto para modificar. ele diferencia pelo id se for null ou nao.
 	}
 	
 	public void delete(Integer id) {
@@ -61,5 +62,9 @@ public class CategoriaService {
 	//metodo aux que instancia uma categoria a partir de um DTO
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(), objDto.getNome());
+	}
+	
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 	}
 }
