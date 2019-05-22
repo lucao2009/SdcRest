@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,8 @@ public class CategoriaResource {
 	} // fim do GET
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj) {	// a notacao @RequestBody faz o json ser convertido para um objeto Java automaticamente
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {	// a notacao @RequestBody faz o json ser convertido para um objeto Java automaticamente
+		Categoria obj = service.fromDTO(objDto);
 		obj = service.insert(obj);	//a operacao save do repository me retorna um objeto, por isso o 'obj = '
 		//aqui o novo objeto jah foi inserido no banco e jah possui um id, agora eu uso esse id na URI de resposta
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();	//construindo a URI
@@ -45,7 +48,8 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT) 
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
+		Categoria obj = service.fromDTO(objDto);
 		obj.setId(id);  // por garantia
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
