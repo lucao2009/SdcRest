@@ -2,33 +2,35 @@ package com.sdc.synchro.services;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import com.sdc.synchro.domain.Matricula;
+import com.sdc.synchro.repositories.MatriculaRepository;
 import com.sdc.synchro.services.exceptions.DataIntegrityException;
 import com.sdc.synchro.services.exceptions.ObjectNotFoundException;
-import com.sdc.synchro.domain.Aluno;
-import com.sdc.synchro.repositories.AlunoRepository;
 
 @Service
-public class AlunoService {
+public class MatriculaService {
 
 	@Autowired
-	private AlunoRepository repo;
+	private MatriculaRepository repo;
 	
 	
-	public Aluno findById(Integer id) {
-		Optional<Aluno> obj = repo.findById(id);
+	public Matricula findById(Integer id) {
+		Optional<Matricula> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto nao encontrado! Id: " + id + ", Tipo: " + Aluno.class.getName()));
+				"Objeto nao encontrado! Id: " + id + ", Tipo: " + Matricula.class.getName()));
 	}
 	
-	public Aluno insert(Aluno obj) {
+	public Matricula insert(Matricula obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
 	
-	public Aluno update(Aluno obj) {
+	public Matricula update(Matricula obj) {
 		findById(obj.getId());
 		return repo.save(obj);
 	}
@@ -38,11 +40,11 @@ public class AlunoService {
 		try {
 			repo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir.");
+			throw new DataIntegrityException("Não é possível excluir");
 		}
 	}
 	
-	public List<Aluno> findAll() {
+	public List<Matricula> findAll() {
 		return repo.findAll();
 	}
 }

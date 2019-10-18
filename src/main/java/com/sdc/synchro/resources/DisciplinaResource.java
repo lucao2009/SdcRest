@@ -11,36 +11,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.sdc.synchro.domain.Aluno;
-import com.sdc.synchro.services.AlunoService;
 
+import com.sdc.synchro.domain.Disciplina;
+import com.sdc.synchro.services.DisciplinaService;
 
 @RestController
-@RequestMapping(value="/alunos") //o parametro do 'value' eh o nome do endpoit que eu quero criar, essa classe serah um controlador REST e
-										// responderah pelo endpoint /categorias
-public class AlunoResource {
+@RequestMapping(value="/disciplinas")
+public class DisciplinaResource {
 	
 	@Autowired
-	private AlunoService service;		//acessando o servico
+	private DisciplinaService service;
 	
-	//para esse metodo java ser uma funcao REST, eu tenho que associar ela com algum dos verbos do http
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Aluno> find(@PathVariable Integer id) {
+	public ResponseEntity<Disciplina> find(@PathVariable Integer id) {
 		
-		Aluno obj = service.findById(id);
+		Disciplina obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 
 	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<Aluno>> findAll() {
+	public ResponseEntity<List<Disciplina>> findAll() {
 		
-		List<Aluno> obj = service.findAll();
+		List<Disciplina> obj = service.findAll();
 		return ResponseEntity.ok().body(obj);
 	}	
 
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Aluno obj){
+	public ResponseEntity<Void> insert(@RequestBody Disciplina obj){
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -48,7 +46,7 @@ public class AlunoResource {
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Aluno obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@RequestBody Disciplina obj, @PathVariable Integer id){
 		obj.setId(id);
 		obj = service.update(obj);
 		
@@ -61,5 +59,4 @@ public class AlunoResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
 }

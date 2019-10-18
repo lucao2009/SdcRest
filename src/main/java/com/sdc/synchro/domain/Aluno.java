@@ -1,12 +1,10 @@
 package com.sdc.synchro.domain;
 
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
 
 @Entity
 public class Aluno implements Serializable {
@@ -109,10 +107,5 @@ public boolean equals(Object obj) {
 	} else if (!id.equals(other.id))
 		return false;
 	return true;
-}
-
-
-
-
-
+	}
 }
